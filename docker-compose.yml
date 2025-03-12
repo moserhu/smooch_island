@@ -1,0 +1,8 @@
+version: '3'
+services:
+  smooch-app:
+    image: smooch-island
+    container_name: smooch-container
+    restart: always
+    ports:
+      - "8080:80"  # Maps external 8080 to internal 80 (NGINX inside the container)

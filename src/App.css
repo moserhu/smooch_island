@@ -1,38 +1,586 @@
-.App {
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url('../public/smooch_BG.jpg') no-repeat center center fixed;
+  background-size: cover;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+.container {
+  max-width: 100%;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+}
+
+
+h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  background: linear-gradient(45deg, #d42f5b, #ff8fab, #ffde59, #ff1654);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 3s linear infinite;
+  text-shadow: 4px 4px 10px rgba(255, 50, 100, 0.5);
+  margin-top: 30px;
+}
+
+/* Animated Gradient Effect */
+@keyframes titleGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.top-right-buttons {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Style the Menu button */
+.menu-button {
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.menu-button:hover {
+  background: #d01148;
+  transform: scale(1.05);
+}
+
+
+
+.players, .pairs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px; /* Less gap between items */
+  padding: 5px;
+  max-width: 100%;
+}
+
+.player, .pair {
+  padding: 6px 10px; /* Smaller padding */
+  font-size: 0.9rem; /* Smaller font */
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  min-width: 60px; /* Smallest possible size */
+  white-space: nowrap; /* Prevents unnecessary wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player {
+  background: #ff8fab;
+}
+
+.player:hover {
+  background: #ff70a6;
+}
+
+.player.selected {
+  background: #ff1654;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 0px 10px rgba(255, 22, 84, 0.8);
+  transform: scale(1.05);
+}
+
+/* 🔹 Pairs - Compact & Aligned */
+.pair {
+  display: flex;
+  background: #ff8fab;
+  border-radius: 8px;
+  padding: 5px 10px;
+  min-width: auto; /* Adjusts dynamically */
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pair:hover {
+  background: #ff70a6;
+}
+
+.pair.selected-pair {
+  background: #ff1654;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 0px 12px rgba(255, 22, 84, 0.8);
+  transform: scale(1.05);
+}
+
+/* 🔹 Containers - More Compact */
+.player-and-pool-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 3px 3px 12px rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
+}
+
+.player-pool-container, .paired-players-container {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3);
+  min-width: 160px; /* Prevents unnecessary stretching */
+}
+
+
+.episode {
+  flex: 1 1 auto;
+  background: linear-gradient(10deg, #2b1b23, #ff00ff); /* Default vibrant gradient */
+  color: white;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0px 0px 15px rgba(255, 75, 100, 0.6);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s;
+  position: relative;
+  width: 12vw; /* Fixed width based on viewport */
+  height: 14vw; /* Fixed height for uniformity */
+  max-width: 80px;
+  max-height: 80px;
+  min-width: 10px;
+  min-height: 10px;
+  font-size: clamp(0.6rem, 1.5vw, 1rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Ensures text starts at the top */
+  align-items: center;
+  padding-top: 35px; /* Pushes content down */
+}
+
+/* Subtle floating effect */
+@keyframes floatingGlow {
+  from {
+    transform: translateY(-5px) rotate(2deg);
+    opacity: 0.2;
+  }
+  to {
+    transform: translateY(5px) rotate(-2deg);
+    opacity: 0.4;
+  }
+}
+
+/* Adjusted Title Styling */
+.episode-title {
+  position: absolute;
+  top: 5px; /* Keeps it inside the card but at the top */
+  width: 80%; /* Makes it centered inside the episode */
+  background: rgba(0, 0, 0, 0.6); /* Slight transparency */
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: clamp(0.7rem, 1.5vw, 1rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Episode content gets pushed down so the title has space */
+.episode-content {
+  text-align: center;
+  flex-grow: 1; /* Pushes content down */
+  padding-top: 10px; /* Space below the title */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Hover Effect */
+.episode:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 0px 25px rgba(255, 50, 100, 0.8);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Active Episode Effect */
+/* Adjust active effect */
+.episode.active {
+  transform: scale(1.05);
+  box-shadow: 0px 0px 40px rgba(11, 231, 255);
+  border: 2px solid white;
+}
+
+/* Villa Episode Styling */
+.episode.villa {
+  background: linear-gradient(45deg, #ffde59, #ffcc00);
+  color: black;
+  box-shadow: 0px 0px 12px rgba(255, 223, 0, 0.9);
+}
+
+/* Active Villa Episode Glow */
+.episode.villa.active {
+  box-shadow: 0px 0px 40px rgba(11, 231, 255);
+  transform: scale(1.08) rotateY(5deg);
+  border: 2px solid white;
+}
+
+
+
+.star {
+  background: rgba(0, 238, 255, 0.5);
+  padding: 15px;
+  display: inline-block;
+  margin: 5px;
+  font-weight: bold;
+  text-align: center;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  box-shadow: 0px 0px 15px rgba(30, 60, 255, 0.7); /* Neon blue glow */
+}
+
+.star.active {
+  background: #ffde59;
+  box-shadow: 0px 0px 30px rgba(30, 60, 255); /* Neon blue glow */
+  color: black;
+
+}
+
+
+button {
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 5px;
+}
+
+button:hover {
+  background: #d01148;
+}
+
+input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.viewership-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  background: linear-gradient(45deg, #c1357b, #ff00ffa7); /* Neon pink */
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px rgba(255, 0, 128, 0.8); /* Glowing effect */
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 97%;
+  min-width: 100px; /* Ensures it doesn’t shrink too much */
+  padding-top: 20px;
+}
+
+
+
+.board {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: nowrap; /* Keeps items in one line */
+  width: 100%;
+  background: #ff8fab;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.episode-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5vw; /* Dynamic spacing */
+  max-width: 100%;
+  padding: clamp(5px, 2vw, 15px);
+  overflow-x: auto; /* Allows horizontal scrolling if necessary */
+  background: linear-gradient(45deg, #c1357b, #ff00ffa7); /* Neon pink gradient */
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 20px rgba(255, 0, 128, 0.8); /* Glowing effect */
+  border: 2px solid rgba(12, 11, 11, 0.3);
+
+}
+
+
+/* Wrapper to group label and content together */
+.section-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: rgba(255, 255, 255, 0.2); /* Slightly transparent white */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 4px 4px 15px rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.sub-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(45deg, #c1357b, #ff00ffa7); /* Neon pink gradient */
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0px 0px 20px rgba(255, 0, 128, 0.8); /* Glowing effect */
+  border: 2px solid rgba(12, 11, 11, 0.3);
+}
+
+/* Label Styling */
+.section-label {
+  background:  rgb(55, 69, 161); /* Solid pastel blue */
   color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8); /* Soft glow effect */
+  text-shadow: 0px 0px 12px rgba(255, 75, 100, 0.9);
+  margin-bottom: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+/* Floating Add Player Button */
+.add-player-button {
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.add-player-button:hover {
+  background: #d01148;
+}
+
+/* Player Modal Overlay */
+.player-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Player Modal Styling */
+.player-modal {
+  background: #ffeeba;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+  max-width: 400px;
+}
+
+/* Player List */
+.player-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Player Item */
+.player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Delete Button */
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #d01148;
+  transition: transform 0.2s ease-in-out;
+}
+
+.delete-button:hover {
+  transform: scale(1.2);
+}
+
+.confirm-edit{
+  background: #0b845c;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.delete-player{
+  background: #d01148;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.confirm-edit:hover {
+  background: #0b845c;
+  color: rgb(230, 233, 42);
+  transform: scale(1.2);
+}
+
+.delete-player:hover {
+  color: red;
+  transform: scale(1.2);
+}
+
+/* Close Button */
+.close-modal {
+  margin-top: 10px;
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.close-modal:hover {
+  background: #d01148;
+  transform: scale(1.05);
+}
+
+
+/* Start & How-To-Play Screens */
+.start-screen, .how-to-play-screen {
+  height: 100vh;
+  background: url('../public/smooch_preview.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.start-screen-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: top;
+  align-items: center;
+  text-align: center;
+  padding: 10%;
+}
+
+.start-screen h1, .how-to-play-screen h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #ff1654, #ff8fab, #ffde59, #ff1654);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 4px 4px 10px rgba(255, 50, 100, 0.5);
+  margin-bottom: 20px;
+}
+
+.start-screen button, .how-to-play-screen button {
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  margin: 10px;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-screen button:hover, .how-to-play-screen button:hover {
+  background: #d01148;
+}
+
+.how-to-play-screen ul {
+  text-align: left;
+  font-size: 1.2rem;
+  list-style-type: disc;
+  max-width: 600px;
+  padding: 0;
+}
+
+.start-screen button, .how-to-play-screen button {
+  background: #ff1654;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  margin: 10px;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 6px 6px 20px rgba(30, 60, 255, 0.8); /* Larger and more intense blue */
+}
+
+.start-screen button:hover, .how-to-play-screen button:hover {
+  background: #d01148;
+  box-shadow: 8px 8px 25px rgba(30, 60, 255, 1); /* Stronger blue glow on hover */
+}
+
+
+/* 🔹 Mobile Optimizations */
+
+
+@media (max-width: 600px) {
+  .viewership-container {
+    max-width: 90%; /* Makes sure it doesn’t stretch too far */
   }
-  to {
-    transform: rotate(360deg);
+
+  .viewership-content {
+    flex-wrap: wrap; /* Ensures stars wrap on smaller screens */
+  }
+
+  .star {
+    padding: 10px; /* Makes the stars slightly smaller on mobile */
+  }
+
+  .viewership-container button {
+    font-size: 0.9rem; /* Adjusts button size for mobile */
   }
 }
