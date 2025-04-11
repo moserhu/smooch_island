@@ -5,14 +5,15 @@ const StartScreen = () => {
     const navigate = useNavigate();
     const [hasSavedGame, setHasSavedGame] = useState(false);
 
+    // Check if a saved game exists in local storage
     useEffect(() => {
-        // Check if a saved game exists in local storage
+
         const savedGame = localStorage.getItem("smoochIslandGame");
         setHasSavedGame(!!savedGame);
     }, []);
 
+    // Clear previous game data in local storage and start fresh
     const startNewGame = () => {
-        // Clear previous game and start fresh
         localStorage.removeItem("smoochIslandGame");
         localStorage.setItem("smoochIslandGame", JSON.stringify({ title: "Smooch Island Game", players: [] }));
         navigate("/game");

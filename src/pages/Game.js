@@ -13,9 +13,9 @@ const Game = () => {
     const [viewership, setViewership] = useState(1);
     const [newPlayer, setNewPlayer] = useState("");
     const [showPlayerModal, setShowPlayerModal] = useState(false);
-    const [editingPlayer, setEditingPlayer] = useState(null); // Track the player being edited
+    const [editingPlayer, setEditingPlayer] = useState(null); 
 
-
+// Episode details
     const episodeDetails = [
         { label: "Villa", drawCards: 3 },
         { label: "Date", peopleIcons: 4 },
@@ -29,8 +29,9 @@ const Game = () => {
         { label: "Villa", drawCards: 2 }
     ];
 
+// Load game data from local storage
     useEffect(() => {
-        // Load game data from local storage
+   
         const savedGame = JSON.parse(localStorage.getItem("smoochIslandGame"));
         if (savedGame) {
             setPlayers(savedGame.players || []);
@@ -40,6 +41,7 @@ const Game = () => {
         }
     }, []);
 
+/// Save game data to local storage
     const saveGame = (updatedPlayers, updatedPairs, updatedEpisode, updatedViewership) => {
         localStorage.setItem("smoochIslandGame", JSON.stringify({
             title: "Smooch Island Game",
@@ -50,6 +52,7 @@ const Game = () => {
         }));
     };
 
+    // Add a new player
     const addPlayer = () => {
         if (newPlayer.trim() && !players.includes(newPlayer)) {
             const updatedPlayers = [...players, newPlayer.trim()];
@@ -59,27 +62,29 @@ const Game = () => {
         }
     };
 
-
+// Edit an existing player
     const editPlayer = (index, newName) => {
         const updatedPlayers = [...players];
         updatedPlayers[index] = newName;
         setPlayers(updatedPlayers);
         saveGame(updatedPlayers, pairs, currentEpisode, viewership);
     };
-
+// button to confirm the edit
     const confirmEditPlayer = (index) => {
         if (!players[index].trim()) return;
         saveGame(players, pairs, currentEpisode, viewership);
         setEditingPlayer(null); // Exit edit mode
     };    
 
-
+// Delete a player
     const deletePlayer = (index) => {
         const updatedPlayers = players.filter((_, i) => i !== index);
         setPlayers(updatedPlayers);
         saveGame(updatedPlayers, pairs, currentEpisode, viewership);
     };
 
+    //_________________________Following 2 functions are for pairing players___________________________
+    // Toggle player selection
     const togglePlayer = (name) => {
         setSelectedPlayers(prev => {
             if (prev.includes(name)) {
@@ -91,6 +96,7 @@ const Game = () => {
         });
     };
 
+    // Pair selected players
     const pairPlayers = () => {
         if (selectedPlayers.length === 2) {
             const updatedPairs = [...pairs, selectedPlayers];
@@ -103,10 +109,13 @@ const Game = () => {
         }
     };
 
+//__________________________Following 2 functions are for breaking up pairs___________________________
+// Select a pair to break up
     const selectPair = (index) => {
         setSelectedPair(index === selectedPair ? null : index);
     };
 
+    // Break up selected pair
     const breakUpPair = () => {
         if (selectedPair !== null) {
             const [p1, p2] = pairs[selectedPair];
@@ -120,11 +129,13 @@ const Game = () => {
         }
     };
 
+    //set the current episode
     const setEpisode = (episode) => {
         setCurrentEpisode(episode);
         saveGame(players, pairs, episode, viewership);
     };
 
+    //set the viewership level
     const setViewershipLevel = (level) => {
         setViewership(level);
         saveGame(players, pairs, currentEpisode, level);
@@ -137,7 +148,7 @@ const Game = () => {
                 <button className="add-player-button" onClick={() => setShowPlayerModal(true)}>👤</button>
             </div>
             <h1>Smooch Island</h1>
-
+{/*player modal*/}
             {showPlayerModal && (
                 <div className="player-modal-overlay">
                     <div className="player-modal">
@@ -151,7 +162,7 @@ const Game = () => {
                       onKeyDown={(e) => {
                        if (e.key === "Enter") {
                             addPlayer();
-                           e.target.focus(); // Keeps input field focused
+                           e.target.focus(); 
                         }
                           }}
                          placeholder="Enter player name"
@@ -162,30 +173,45 @@ const Game = () => {
                         {/* List Existing Players */}
                         <div className="player-list">
                         {players.map((name, index) => (
-    <div key={index} className="player-item">
-        {editingPlayer === index ? (
-            <input
-                type="text"
-                value={players[index]}
-                onChange={(e) => editPlayer(index, e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter") confirmEditPlayer(index);
-                }}
-                autoFocus
-            />
-        ) : (
-            <span onClick={() => setEditingPlayer(index)}>{name}</span>
-        )}
-
-        {editingPlayer === index ? (
-            <button className="confirm-edit" onClick={() => confirmEditPlayer(index)}>✔</button>
-        ) : (
-            <button className="delete-player" onClick={() => deletePlayer(index)}>🗑</button>
-        )}
-    </div>
-))}
-
-                        </div>
+                        <div key={index} className="player-item">
+                             {editingPlayer === index ? (
+                      <>
+                          <input
+                             type="text"
+                             value={players[index]}
+                             onChange={(e) => editPlayer(index, e.target.value)}
+                             onKeyDown={(e) => {
+                               if (e.key === "Enter") confirmEditPlayer(index);
+                              }}
+                            autoFocus
+                           />
+                           <button
+                             className="confirm-edit"
+                             onClick={() => confirmEditPlayer(index)}
+                           >
+                             ✔
+                           </button>
+                      </>
+                 ) : (
+                   <>
+                     <span>{name}</span>
+                     <button
+                       className="edit-player"
+                       onClick={() => setEditingPlayer(index)}
+                     >
+                       ✏️
+                     </button>
+                     <button
+                       className="delete-player"
+                       onClick={() => deletePlayer(index)}
+                     >
+                       🗑️
+                     </button>
+                   </>
+                 )}
+               </div>
+             ))}
+           </div>
 
                         <button className="close-modal" onClick={() => setShowPlayerModal(false)}>✖</button>
                     </div>

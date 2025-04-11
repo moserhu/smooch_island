@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/HowToPlay.css"; // Import new CSS file
+import "../styles/HowToPlay.css"; 
 
 const HowToPlay = () => {
     const navigate = useNavigate();

@@ -457,7 +457,7 @@ input {
   transition: transform 0.2s;
 }
 
-.delete-player{
+.delete-player .edit-player{
   background: #d01148;
   border: none;
   font-size: 1.2rem;
@@ -471,8 +471,13 @@ input {
   transform: scale(1.2);
 }
 
-.delete-player:hover {
+.delete-player:hover{
   color: red;
+  transform: scale(1.2);
+}
+
+.edit-player:hover{
+  color: #d01148;
   transform: scale(1.2);
 }
 
