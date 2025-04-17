@@ -1,0 +1,61 @@
+on:
+  # manual trigger
+  workflow_dispatch:
+    inputs:
+      platforms:
+        required: false
+        type: string
+        # build artifacts for x86 and arm64 machines
+        default: 'linux/amd64,linux/arm64'
+  # when we push to main or create a release
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  # when we open a pr
+  pull_request:
+    branches:
+      - 'main'
+
+permissions:
+  # clone repo
+  contents: read
+  # push container
+  packages: write
+
+jobs:
+  docker-build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # clone code
+      - uses: actions/checkout@v3
+  
+      # for building multi-arch images
+      - uses: docker/setup-qemu-action@v2
+      - uses: docker/setup-buildx-action@v2
+
+      - uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # generate metadata for our images
+      - id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: .
+          platforms: ${{ inputs.platforms }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
